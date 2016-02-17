@@ -49,20 +49,122 @@
 	var React = __webpack_require__(1);
 	var ReactDom = __webpack_require__(158);
 
-	var App = React.createClass({
-	  displayName: 'App',
+	var ZoneRow = React.createClass({
+	  displayName: 'ZoneRow',
+
 
 	  render: function render() {
+
 	    return React.createElement(
-	      'h1',
+	      'tr',
 	      null,
-	      this.props.message
+	      React.createElement(
+	        'td',
+	        null,
+	        this.props.zone.id
+	      ),
+	      React.createElement(
+	        'td',
+	        null,
+	        this.props.zone.kind
+	      ),
+	      React.createElement(
+	        'td',
+	        null,
+	        this.props.zone.dnssec
+	      )
 	    );
 	  }
 	});
 
-	ReactDom.render(React.createElement(App, { message: 'Hello, world!' }), document.getElementById('content'));
-	// ReactDom.render(<h1>Hello, world!</h1>, document.getElementById('content'));
+	var ZoneTable = React.createClass({
+	  displayName: 'ZoneTable',
+
+
+	  render: function render() {
+	    var rows = [];
+	    this.props.zones.forEach(function (zone) {
+	      if (zone.id.indexOf(this.props.filterText) === -1) {
+	        return;
+	      }
+	      rows.push(React.createElement(ZoneRow, { zone: zone, key: zone.id }));
+	    }.bind(this));
+
+	    return React.createElement(
+	      'table',
+	      null,
+	      React.createElement(
+	        'thead',
+	        null,
+	        React.createElement(
+	          'tr',
+	          null,
+	          React.createElement(
+	            'th',
+	            null,
+	            'Domain'
+	          ),
+	          React.createElement(
+	            'th',
+	            null,
+	            'Type'
+	          ),
+	          React.createElement(
+	            'th',
+	            null,
+	            'DNSSEC'
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'tbody',
+	        null,
+	        rows
+	      )
+	    );
+	  }
+	});
+
+	var SearchBar = React.createClass({
+	  displayName: 'SearchBar',
+
+	  handleChange: function handleChange() {
+	    this.props.onUserInput(this.refs.filterTextInput.value);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      null,
+	      React.createElement('input', { type: 'text', placeholder: 'Search...', value: this.props.filterText, ref: 'filterTextInput', onChange: this.handleChange })
+	    );
+	  }
+	});
+
+	var FilterableZoneTable = React.createClass({
+	  displayName: 'FilterableZoneTable',
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      filterText: ''
+	    };
+	  },
+	  handleUserInput: function handleUserInput(filterText) {
+	    this.setState({ filterText: filterText });
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(SearchBar, { filterText: this.state.filterText, onUserInput: this.handleUserInput }),
+	      React.createElement(ZoneTable, { zones: this.props.zones, filterText: this.state.filterText })
+	    );
+	  }
+	});
+
+	var ZONES = [{ id: 'a.a', kind: 'Master', dnssec: 1 }, { id: 'b.b', kind: 'Slave', dnssec: 0 }, { id: 'c.c', kind: 'Master', dnssec: 1 }];
+
+	ReactDom.render(React.createElement(FilterableZoneTable, { zones: ZONES }), document.getElementById('dns'));
+	// ReactDom.render(<h1>Hello, world!</h1>, document.getElementById('Zone'));
 
 /***/ },
 /* 1 */
