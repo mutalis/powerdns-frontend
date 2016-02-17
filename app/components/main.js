@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDom = require('react-dom');
 
-var ZoneRow = React.createClass({
+var Zone = React.createClass({
 
   render: function() {
 
@@ -15,7 +15,7 @@ var ZoneRow = React.createClass({
   }
 });
 
-var ZoneTable = React.createClass({
+var ZoneList = React.createClass({
 
   render: function() {
     var rows=[];
@@ -23,7 +23,7 @@ var ZoneTable = React.createClass({
       if (zone.id.indexOf(this.props.filterText) === -1) {
         return;
       }
-      rows.push(<ZoneRow zone={zone} key={zone.id} />);
+      rows.push(<Zone zone={zone} key={zone.id} />);
     }.bind(this));
 
     return (
@@ -56,30 +56,79 @@ var SearchBar = React.createClass({
   }
 });
 
-var FilterableZoneTable = React.createClass({
-  getInitialState: function() {
-    return {
-      filterText: ''
-    };
+var ZoneForm = React.createClass({
+  handleDomainChange: function(e){
+    this.setState({id: e.target.value});
+  },
+  handleKindChange: function(e){
+    this.setState({kind: e.target.value});
+  },
+  handleSubmit: function(e){
+    e.preventDefault();
+    var domain = this.state.id.trim();
+    var kind = this.state.kind.trim();
+    if (!domain || !kind ) {
+      return
+    }
+    this.props.onZoneSubmit({id: domain, kind: kind, dnssec: 0});
+    this.setState({id: '', kind: 'Master', dnssec: 0});
+  },
+  getInitialState: function(){
+    return {id: '', kind: 'Master', dnssec: 0};
+  },
+  render: function() {
+    return (
+      <form className="zoneForm" onSubmit={this.handleSubmit}>
+        <input type="text" placeholder="Domain" value={this.state.id} onChange={this.handleDomainChange}/>
+        <select value={this.state.kind} onChange={this.handleKindChange}>
+          <option value="Native">Native</option>
+          <option value="Master">Master</option>
+          <option value="Slave">Slave</option>
+          <option value="Forwarded">Forwarded</option>
+        </select>
+        <input type="submit" value="Add Zone"/>
+      </form>
+    );
+  }
+});
+
+var ZoneBox = React.createClass({
+  loadCommentsFromServer: function(){
+    var zones = [
+      {id: 'a.a', kind: 'Master', dnssec: 0},
+      {id: 'b.b', kind: 'Slave', dnssec: 0},
+      {id: 'c.c', kind: 'Master', dnssec: 0},
+      {id: 'd.d', kind: 'Native', dnssec: 0}
+    ];
+    this.setState({zones: zones});
   },
   handleUserInput: function(filterText){
     this.setState({filterText: filterText});
+  },
+  handleZoneSubmit: function(zone){
+    var zones = this.state.zones;
+    var newZones = zones.concat([zone]);
+    this.setState({zones: newZones});
+  },
+  getInitialState: function() {
+    return {
+      filterText: '',
+      zones: []
+    };
+  },
+  componentDidMount: function(){
+    this.loadCommentsFromServer();
   },
   render: function() {
     return (
       <div>
         <SearchBar filterText={this.state.filterText} onUserInput={this.handleUserInput}/>
-        <ZoneTable zones={this.props.zones} filterText={this.state.filterText}/>
+        <ZoneList zones={this.state.zones} filterText={this.state.filterText}/>
+        <ZoneForm onZoneSubmit={this.handleZoneSubmit}/>
       </div>
     );
   }
 });
 
-var ZONES = [
-  {id: 'a.a', kind: 'Master', dnssec: 1},
-  {id: 'b.b', kind: 'Slave', dnssec: 0},
-  {id: 'c.c', kind: 'Master', dnssec: 1}
-];
-
-ReactDom.render(<FilterableZoneTable zones={ZONES} />, document.getElementById('dns'));
+ReactDom.render(<ZoneBox />, document.getElementById('dns'));
 // ReactDom.render(<h1>Hello, world!</h1>, document.getElementById('Zone'));
