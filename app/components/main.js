@@ -2,7 +2,9 @@ var React = require('react');
 var ReactDom = require('react-dom');
 
 var Zone = React.createClass({
-
+  handleDeleteZone:function(){
+    this.props.onZoneDelete(this.props.zone);
+  },
   render: function() {
 
     return (
@@ -10,6 +12,7 @@ var Zone = React.createClass({
         <td>{this.props.zone.id}</td>
         <td>{this.props.zone.kind}</td>
         <td>{this.props.zone.dnssec}</td>
+        <td><button onClick={this.handleDeleteZone}>Delete Zone</button></td>
       </tr>
     );
   }
@@ -23,7 +26,7 @@ var ZoneList = React.createClass({
       if (zone.id.indexOf(this.props.filterText) === -1) {
         return;
       }
-      rows.push(<Zone zone={zone} key={zone.id} />);
+      rows.push(<Zone zone={zone} key={zone.id} onZoneDelete={this.props.onZoneDelete}/>);
     }.bind(this));
 
     return (
@@ -93,7 +96,7 @@ var ZoneForm = React.createClass({
 });
 
 var ZoneBox = React.createClass({
-  loadCommentsFromServer: function(){
+  loadZonesFromServer: function(){
     var zones = [
       {id: 'a.a', kind: 'Master', dnssec: 0},
       {id: 'b.b', kind: 'Slave', dnssec: 0},
@@ -101,6 +104,18 @@ var ZoneBox = React.createClass({
       {id: 'd.d', kind: 'Native', dnssec: 0}
     ];
     this.setState({zones: zones});
+  },
+  handleZoneDelete(zone_to_delete){
+    var zones = this.state.zones;
+    zones.forEach(function(zone, array_index) {
+      var index = zone.id.indexOf(zone_to_delete.id);
+      if ( index !== -1) {
+        zones.splice(array_index, 1);
+      }
+      return;
+    });
+    this.setState({zones: zones});
+    console.log(this.state.zones);
   },
   handleUserInput: function(filterText){
     this.setState({filterText: filterText});
@@ -117,13 +132,13 @@ var ZoneBox = React.createClass({
     };
   },
   componentDidMount: function(){
-    this.loadCommentsFromServer();
+    this.loadZonesFromServer();
   },
   render: function() {
     return (
       <div>
         <SearchBar filterText={this.state.filterText} onUserInput={this.handleUserInput}/>
-        <ZoneList zones={this.state.zones} filterText={this.state.filterText}/>
+        <ZoneList zones={this.state.zones} filterText={this.state.filterText} onZoneDelete={this.handleZoneDelete}/>
         <ZoneForm onZoneSubmit={this.handleZoneSubmit}/>
       </div>
     );

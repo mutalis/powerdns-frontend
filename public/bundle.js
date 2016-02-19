@@ -52,7 +52,9 @@
 	var Zone = React.createClass({
 	  displayName: 'Zone',
 
-
+	  handleDeleteZone: function handleDeleteZone() {
+	    this.props.onZoneDelete(this.props.zone);
+	  },
 	  render: function render() {
 
 	    return React.createElement(
@@ -72,6 +74,15 @@
 	        'td',
 	        null,
 	        this.props.zone.dnssec
+	      ),
+	      React.createElement(
+	        'td',
+	        null,
+	        React.createElement(
+	          'button',
+	          { onClick: this.handleDeleteZone },
+	          'Delete Zone'
+	        )
 	      )
 	    );
 	  }
@@ -87,7 +98,7 @@
 	      if (zone.id.indexOf(this.props.filterText) === -1) {
 	        return;
 	      }
-	      rows.push(React.createElement(Zone, { zone: zone, key: zone.id }));
+	      rows.push(React.createElement(Zone, { zone: zone, key: zone.id, onZoneDelete: this.props.onZoneDelete }));
 	    }.bind(this));
 
 	    return React.createElement(
@@ -199,10 +210,23 @@
 	var ZoneBox = React.createClass({
 	  displayName: 'ZoneBox',
 
-	  loadCommentsFromServer: function loadCommentsFromServer() {
+	  loadZonesFromServer: function loadZonesFromServer() {
 	    var zones = [{ id: 'a.a', kind: 'Master', dnssec: 0 }, { id: 'b.b', kind: 'Slave', dnssec: 0 }, { id: 'c.c', kind: 'Master', dnssec: 0 }, { id: 'd.d', kind: 'Native', dnssec: 0 }];
 	    this.setState({ zones: zones });
 	  },
+	  handleZoneDelete: function handleZoneDelete(zone_to_delete) {
+	    var zones = this.state.zones;
+	    zones.forEach(function (zone, array_index) {
+	      var index = zone.id.indexOf(zone_to_delete.id);
+	      if (index !== -1) {
+	        zones.splice(array_index, 1);
+	      }
+	      return;
+	    });
+	    this.setState({ zones: zones });
+	    console.log(this.state.zones);
+	  },
+
 	  handleUserInput: function handleUserInput(filterText) {
 	    this.setState({ filterText: filterText });
 	  },
@@ -218,14 +242,14 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    this.loadCommentsFromServer();
+	    this.loadZonesFromServer();
 	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(SearchBar, { filterText: this.state.filterText, onUserInput: this.handleUserInput }),
-	      React.createElement(ZoneList, { zones: this.state.zones, filterText: this.state.filterText }),
+	      React.createElement(ZoneList, { zones: this.state.zones, filterText: this.state.filterText, onZoneDelete: this.handleZoneDelete }),
 	      React.createElement(ZoneForm, { onZoneSubmit: this.handleZoneSubmit })
 	    );
 	  }
