@@ -1,6 +1,13 @@
 module.exports = {
   entry: './app/components/main.js',
-  output: { filename: 'public/bundle.js' },
+  output: {
+    path: './',
+    filename: 'public/bundle.js'
+  },
+  devServer: {
+    inline: true,
+    port: 8080
+  },
   module: {
     loaders: [
       {
