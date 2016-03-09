@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import App from './App.jsx';
+import ZoneBox from './ZoneBox.jsx';
 
-ReactDom.render(<App />, document.getElementById('dns'));
+ReactDom.render(<ZoneBox />, document.getElementById('dns'));
