@@ -2,6 +2,17 @@ import React from 'react';
 import Zone from './Zone.jsx';
 
 class ZoneList extends React.Component {
+  static propTypes = {
+    zones: React.PropTypes.array.isRequired,
+    filterText: React.PropTypes.string.isRequired,
+    onZoneDelete: React.PropTypes.func
+  };
+
+  static defaultProps = {
+    zones: [],
+    filterText: ''
+  };
+
   constructor() {
     super();
   }
@@ -30,16 +41,5 @@ class ZoneList extends React.Component {
   }
 
 }
-
-ZoneList.propTypes = {
-  zones: React.PropTypes.array,
-  filterText: React.PropTypes.string.isRequired,
-  onZoneDelete: React.PropTypes.func
-};
-
-ZoneList.defaultProps = {
-  zones: [],
-  filterText: ''
-};
 
 export default ZoneList;
