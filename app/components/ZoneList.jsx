@@ -5,7 +5,7 @@ class ZoneList extends React.Component {
   static propTypes = {
     zones: React.PropTypes.array.isRequired,
     filterText: React.PropTypes.string.isRequired,
-    onZoneDelete: React.PropTypes.func
+    onZoneDelete: React.PropTypes.func.isRequired
   };
 
   static defaultProps = {

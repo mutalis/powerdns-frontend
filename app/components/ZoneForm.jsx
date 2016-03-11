@@ -1,13 +1,18 @@
 import React from 'react';
 
 class ZoneForm extends React.Component {
+  static propTypes = {
+    onZoneSubmit: React.propTypes.func.isRequired
+  };
+
+  state = {
+    id: '',
+    kind: 'Master',
+    dnssec: 0
+  };
+
   constructor() {
     super();
-    this.state = {
-      id: '',
-      kind: 'Master',
-      dnssec: 0
-    };
     this.handleDomainChange = this.handleDomainChange.bind(this);
     this.handleKindChange = this.handleKindChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

@@ -1,6 +1,15 @@
 import React from 'react';
 
 class SearchBar extends React.Component {
+  static propTypes = {
+    filterText: React.PropTypes.string.isRequired,
+    onUserInput: React.PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    filterText: ''
+  };
+
   constructor() {
     super();
     this.handleChange = this.handleChange.bind(this);

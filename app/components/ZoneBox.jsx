@@ -4,12 +4,13 @@ import ZoneList from './ZoneList';
 import ZoneForm from './ZoneForm';
 
 class ZoneBox extends React.Component {
+  state = {
+    filterText: '',
+    zones: []
+  };
+
   constructor() {
     super();
-    this.state = {
-      filterText: '',
-      zones: []
-    };
     this.loadZonesFromServer = this.loadZonesFromServer.bind(this);
     this.handleUserInput = this.handleUserInput.bind(this);
     this.handleZoneDelete = this.handleZoneDelete.bind(this);
