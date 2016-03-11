@@ -1,9 +1,14 @@
+const context = __dirname + '/app/components';
+const outputContext = __dirname + '/public';
+
 module.exports = {
-  entry: './app/components/main.js',
+  context: context,
+  entry: './App.jsx',
   output: {
-    path: './',
-    filename: 'public/bundle.js'
+    path: outputContext,
+    filename: 'bundle.js'
   },
+  devtool: 'eval',
   devServer: {
     inline: true,
     port: 8080
@@ -11,7 +16,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.jsx?$/,
+        test: /\.jsx$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: {
@@ -19,5 +24,8 @@ module.exports = {
         }
       }
     ]
+  },
+  resolve: {
+    extensions: ['', '.json', '.js', '.jsx']
   }
-}
+};

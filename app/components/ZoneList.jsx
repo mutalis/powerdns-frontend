@@ -1,5 +1,5 @@
 import React from 'react';
-import Zone from './Zone.jsx';
+import Zone from './Zone';
 
 class ZoneList extends React.Component {
   static propTypes = {

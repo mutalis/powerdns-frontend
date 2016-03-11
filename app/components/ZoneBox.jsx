@@ -1,7 +1,7 @@
 import React from 'react';
-import SearchBar from './SearchBar.jsx';
-import ZoneList from './ZoneList.jsx';
-import ZoneForm from './ZoneForm.jsx';
+import SearchBar from './SearchBar';
+import ZoneList from './ZoneList';
+import ZoneForm from './ZoneForm';
 
 class ZoneBox extends React.Component {
   constructor() {

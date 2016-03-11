@@ -1,16 +1,6 @@
 import React from 'react';
-import MessageList from './MessageList.jsx';
+import ReactDom from 'react-dom';
 
-class App extends React.Component {
-  constructor() {
-    super();
-  }
+import ZoneBox from './ZoneBox';
 
-  render(){
-    return (
-      <MessageList />
-    )
-  }
-}
-
-export default App;
+ReactDom.render(<ZoneBox />, document.getElementById('dns'));
