@@ -2,7 +2,7 @@ import React from 'react';
 
 class ZoneForm extends React.Component {
   static propTypes = {
-    onZoneSubmit: React.propTypes.func.isRequired
+    onZoneSubmit: React.PropTypes.func.isRequired
   };
 
   state = {
