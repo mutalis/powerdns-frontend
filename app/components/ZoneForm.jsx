@@ -47,7 +47,7 @@ class ZoneForm extends React.Component {
           <option value="Slave">Slave</option>
           <option value="Forwarded">Forwarded</option>
         </select>
-        <input type="submit" value="Add Zone"/>
+        <input id="add-zone-button" type="submit" value="Add Zone"/>
       </form>
     );
   }
