@@ -3,4 +3,4 @@ import ReactDom from 'react-dom';
 
 import ZoneBox from './ZoneBox';
 
-ReactDom.render(<ZoneBox />, document.getElementById('dns'));
+ReactDom.render(<ZoneBox url="http://localhost:3000/zones" />, document.getElementById('dns'));

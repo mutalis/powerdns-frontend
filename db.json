@@ -1,0 +1,24 @@
+{
+  "zones": [
+    {
+      "id": "a.a",
+      "kind": "Master",
+      "dnssec": 0
+    },
+    {
+      "id": "b.b",
+      "kind": "Slave",
+      "dnssec": 0
+    },
+    {
+      "id": "c.c",
+      "kind": "Master",
+      "dnssec": 0
+    },
+    {
+      "id": "d.d",
+      "kind": "Native",
+      "dnssec": 0
+    }
+  ]
+}

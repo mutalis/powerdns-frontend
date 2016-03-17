@@ -1,9 +1,18 @@
 import React from 'react';
+import axios from 'axios';
 import SearchBar from './SearchBar';
 import ZoneList from './ZoneList';
 import ZoneForm from './ZoneForm';
 
 class ZoneBox extends React.Component {
+  static propTypes = {
+    url: React.PropTypes.string.isRequired
+  };
+
+  static defaultProps = {
+    url: ''
+  };
+
   state = {
     filterText: '',
     zones: []
@@ -18,13 +27,24 @@ class ZoneBox extends React.Component {
   }
 
   loadZonesFromServer() {
-    const zones = [
-      {id: 'a.a', kind: 'Master', dnssec: 0},
-      {id: 'b.b', kind: 'Slave', dnssec: 0},
-      {id: 'c.c', kind: 'Master', dnssec: 0},
-      {id: 'd.d', kind: 'Native', dnssec: 0}
-    ];
-    this.setState({zones: zones});
+    axios.get(this.props.url)
+      .then((response) => {
+        const zones = response.data;
+        this.setState({zones: zones});
+      })
+      .catch((response) => {
+        if (response instanceof Error) {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error:', response.message);
+        } else {
+          // The request was made, but the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(response.data);
+          console.log(response.status);
+          console.log(response.headers);
+          console.log(response.config);
+        }
+      });
   }
 
   componentDidMount() {
