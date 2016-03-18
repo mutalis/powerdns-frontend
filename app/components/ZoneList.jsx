@@ -1,5 +1,7 @@
 import React from 'react';
 import Zone from './Zone';
+import CSSModules from 'react-css-modules';
+import styles from './table.scss';
 
 class ZoneList extends React.Component {
   static propTypes = {
@@ -30,7 +32,7 @@ class ZoneList extends React.Component {
       <table>
         <thead>
           <tr>
-            <th>Domain</th>
+            <th styleName='text'>Domain</th>
             <th>Type</th>
             <th>DNSSEC</th>
           </tr>
@@ -42,4 +44,4 @@ class ZoneList extends React.Component {
 
 }
 
-export default ZoneList;
+export default CSSModules(ZoneList, styles);
