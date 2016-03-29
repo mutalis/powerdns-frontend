@@ -3,6 +3,8 @@ import axios from 'axios';
 import SearchBar from './SearchBar';
 import ZoneList from './ZoneList';
 import ZoneForm from './ZoneForm';
+import Button from 'react-toolbox/lib/button';
+import style from './style';
 
 class ZoneBox extends React.Component {
   static propTypes = {
@@ -77,9 +79,12 @@ class ZoneBox extends React.Component {
   render() {
     return (
       <div>
+        <p className={style.text} >Color</p>
+        <Button label="Hello world" />
         <SearchBar filterText={this.state.filterText} onUserInput={this.handleUserInput} />
         <ZoneList zones={this.state.zones} filterText={this.state.filterText} onZoneDelete={this.handleZoneDelete} />
         <ZoneForm onZoneSubmit={this.handleZoneSubmit} />
+        <Button className={style.button} icon="add" floating accent />
       </div>
     );
   }
